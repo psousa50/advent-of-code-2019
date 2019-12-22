@@ -67,8 +67,11 @@
 
 (defn- calc-intersections
   [first-segments second-segments]
-  (remove nil? (for [s1 first-segments s2 second-segments]
-                 (calc-intersection s1 s2))))
+  (for [s1 first-segments
+        s2 second-segments
+        :let [intersection (calc-intersection s1 s2)]
+        :when intersection]
+    intersection))
 
 
 (defn part1
