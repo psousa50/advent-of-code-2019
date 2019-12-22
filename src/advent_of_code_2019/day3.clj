@@ -1,7 +1,8 @@
 (ns advent-of-code-2019.day2
-  (:require [advent-of-code-2019.core :as core]))
+  (:require [advent-of-code-2019.core :as core]
+            [advent-of-code-2019.read-input :as read-input]))
 
-(def day-input (core/read-string-lines "day3.txt"))
+(def day-input (read-input/string-lines "day3.txt"))
 
 (defn- move-to
   [[x y] instruction]
@@ -33,7 +34,7 @@
   [{p1 :p1 p2 :p2}]
   (= (cx p1) (cx p2)))
 
-(defn- between
+(defn- on-segment
   [p1 p2 p]
   (and (< (min p1 p2) p) (< p (max p1 p2))))
 
@@ -43,8 +44,8 @@
     (when (and (horizontal? horizontal) (vertical? vertical))
       (let [[ix iy] [(cx (:p1 vertical)) (cy (:p1 horizontal))]]
         (when (and
-               (between (cx (:p1 horizontal)) (cx (:p2 horizontal)) ix)
-               (between (cy (:p1 vertical)) (cy (:p2 vertical)) iy)) [ix iy])))))
+               (on-segment (cx (:p1 horizontal)) (cx (:p2 horizontal)) ix)
+               (on-segment (cy (:p1 vertical)) (cy (:p2 vertical)) iy)) [ix iy])))))
 
 
 (defn- calc-intersections

@@ -1,13 +1,13 @@
 (ns advent-of-code-2019.day1
-  (:require [advent-of-code-2019.core :as core]))
+  (:require [advent-of-code-2019.read-input :as read-input]))
 
-(def day-input (core/read-one-number-per-line "day1.txt"))
+(def day-input (read-input/one-number-per-line "day1.txt"))
 
 (defn- calculate-fuel [mass] (- (Math/floor (/ mass 3)) 2))
 
-(defn part
-  []
-  (reduce + (map calculate-fuel day-input)))
+(defn part1
+  [masses]
+  (reduce + (map calculate-fuel masses)))
 
 (defn- calculate-fuel-recursively
   [fuel]
@@ -17,5 +17,8 @@
       (+ next (calculate-fuel-recursively next)))))
 
 (defn part2
-  []
-  (reduce + (map calculate-fuel-recursively day-input)))
+  [masses]
+  (reduce + (map calculate-fuel-recursively masses)))
+
+(part1 day-input)
+(part2 day-input)
