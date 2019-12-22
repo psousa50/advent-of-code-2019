@@ -36,7 +36,7 @@
 
 (defn- on-segment
   [p1 p2 p]
-  (and (< (min p1 p2) p) (< p (max p1 p2))))
+  (and (<= (min p1 p2) p) (<= p (max p1 p2))))
 
 (defn- calc-intersection
   [s1 s2]
@@ -48,11 +48,13 @@
                (on-segment (cy (:p1 vertical)) (cy (:p2 vertical)) iy)) [ix iy])))))
 
 
-(defn- calc-intersections
-  [first-segments second-segments]
-  (remove nil? (for [s1 first-segments s2 second-segments]
-                 (calc-intersection s1 s2))))
+(defn- manhattan-distance-to-zero
+  [[x y]]
+  (+ (core/abs x) (core/abs y)))
 
+(defn- find-closest
+  [intersections]
+  (apply min (map manhattan-distance-to-zero intersections)))
 
 (defn- calc-segments
   [path]
@@ -62,19 +64,20 @@
         (recur next-point (next path) (conj segments {:p1 prev-point :p2 next-point}))
         segments))))
 
-(defn- distance-to-zero
-  [[x y]]
-  (+ (core/abs x) (core/abs y)))
 
-(defn- find-closest
-  [intersections]
-  (apply min (map distance-to-zero intersections)))
-  ; (filter #(= (distance-to-zero %) (apply min (map distance-to-zero intersections))) intersections))
+(defn- calc-intersections
+  [first-segments second-segments]
+  (remove nil? (for [s1 first-segments s2 second-segments]
+                 (calc-intersection s1 s2))))
+
 
 (defn part1
   [paths]
-  (let [first-segments (calc-segments (first paths)) second-segments (calc-segments (second paths))]
-    (->> (calc-intersections first-segments second-segments) (remove #(= [0 0] %)) find-closest)))
+  (->> (calc-intersections
+        (calc-segments (first paths))
+        (calc-segments (second paths)))
+       (remove #(= [0 0] %))
+       find-closest))
 
 (part1 day-input)
 
