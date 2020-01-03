@@ -19,13 +19,13 @@
 (defn- fetch-indirect
   [{pc :pc stack :stack :as state}]
   (-> state
-      (update :pc inc')
+      (update :pc inc)
       (assoc :stack (conj stack (get-input-indirect state pc)))))
 
 (defn- fetch-direct
   [{pc :pc stack :stack :as state}]
   (-> state
-      (update :pc inc')
+      (update :pc inc)
       (assoc :stack (conj stack (get-input state pc)))))
 
 (defn- sum
